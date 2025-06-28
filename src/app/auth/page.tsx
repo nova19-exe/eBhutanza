@@ -120,10 +120,12 @@ function SignInForm() {
   async function onSubmit(values: z.infer<typeof signInSchema>) {
     setIsLoading(true);
     try {
-      await signInWithEmailAndPassword(auth, values.email, values.password);
+      const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
+      const user = userCredential.user;
+      const userName = user.displayName || user.email?.split('@')[0] || '';
       toast({
         title: t('signIn'),
-        description: t('welcomeMessage', { userName: '' }),
+        description: t('welcomeMessage', { userName: userName }),
       });
       sessionStorage.setItem('justLoggedIn', 'true');
       router.push('/dashboard');
@@ -222,8 +224,8 @@ function SignUpForm() {
       });
 
       toast({
-        title: 'Account Created',
-        description: "Welcome to eBhutanza! You've been signed in.",
+        title: t('createAccountButton'),
+        description: t('welcomeMessage', { userName: values.fullName }),
       });
       sessionStorage.setItem('justLoggedIn', 'true');
       router.push('/dashboard');
