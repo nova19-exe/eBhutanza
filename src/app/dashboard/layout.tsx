@@ -42,6 +42,7 @@ import { auth } from '@/lib/firebase/config';
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/profile', label: 'Profile', icon: UserIcon },
   { href: '/dashboard/application', label: 'My Application', icon: FileText },
   { href: '/dashboard/compliance', label: 'AI Compliance', icon: ShieldCheck },
   { href: '/dashboard/incorporation', label: 'Incorporate', icon: Building2 },
@@ -164,7 +165,7 @@ export default function DashboardLayout({
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                                 <Avatar>
-                                    <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="person avatar"/>
+                                    <AvatarImage src={user?.photoURL || "https://placehold.co/40x40.png"} alt="@user" data-ai-hint="person avatar"/>
                                     <AvatarFallback>{user?.displayName?.substring(0,2).toUpperCase() || user?.email?.substring(0,2).toUpperCase() || 'U'}</AvatarFallback>
                                 </Avatar>
                             </Button>
@@ -177,7 +178,7 @@ export default function DashboardLayout({
                                 </div>
                             </DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => router.push('/dashboard/profile')}>
                                 <UserIcon className="mr-2 h-4 w-4" />
                                 <span>Edit Profile</span>
                             </DropdownMenuItem>
