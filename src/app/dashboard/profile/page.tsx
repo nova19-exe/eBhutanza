@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { onAuthStateChanged, User, updateProfile } from 'firebase/auth';
-import { auth } from '@/lib/firebase/config';
+import { auth, storage } from '@/lib/firebase/config';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -75,28 +76,31 @@ export default function ProfilePage() {
   };
 
   async function onSubmit(values: z.infer<typeof profileSchema>) {
-    if (!user) {
+    if (!user || !auth.currentUser) {
         toast({ variant: 'destructive', title: 'Error', description: 'You must be logged in to update your profile.' });
         return;
     }
     
     setIsSaving(true);
     try {
-        const { fullName } = values;
+        const { fullName, profilePicture } = values;
+        let photoURL = user.photoURL;
 
-        // In a real application, you would handle file uploads to a storage service (like Firebase Storage)
-        // and then get a URL to update the user's photoURL.
-        
-        await updateProfile(auth.currentUser!, {
-          displayName: fullName,
-          // photoURL: uploadedFileUrl, // This would be the URL from your storage service
-        });
-        
-        // This is a mock update for the photo preview.
-        if (values.profilePicture) {
-            console.log("New profile picture selected:", values.profilePicture);
+        if (profilePicture && profilePicture.length > 0) {
+            const file = profilePicture[0];
+            const storageRef = ref(storage, `profile-pictures/${user.uid}`);
+            await uploadBytes(storageRef, file);
+            photoURL = await getDownloadURL(storageRef);
         }
+        
+        await updateProfile(auth.currentUser, {
+          displayName: fullName,
+          photoURL: photoURL,
+        });
 
+        setUser({ ...auth.currentUser });
+        setImagePreview(photoURL);
+        
         toast({
             title: 'Profile Updated',
             description: 'Your profile has been successfully updated.',
