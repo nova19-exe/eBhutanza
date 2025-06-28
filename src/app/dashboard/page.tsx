@@ -24,12 +24,13 @@ function WelcomeFrame() {
   return (
     <div className="relative -m-4 flex h-screen w-auto flex-col items-center justify-center overflow-hidden text-foreground sm:-m-6">
       <Image
-        src="https://storage.googleapis.com/fcp-stg-testing-images/eBhutanza-hero.png"
+        src="https://placehold.co/1920x1080.png"
         alt="eBhutanza welcome hero image with a monastery in the mountains."
         fill
         objectFit="cover"
         className="z-0"
         priority
+        data-ai-hint="monastery mountains"
       />
     </div>
   );
@@ -78,9 +79,9 @@ export default function DashboardPage() {
       <div ref={mainContentRef} className="flex flex-col gap-8 pt-8">
         <Card>
           <CardHeader>
-            <CardTitle>Welcome to eBhutanza</CardTitle>
+            <CardTitle>Joen pa Leg So, {userName}!</CardTitle>
             <CardDescription>
-              Joen pa Leg So, {userName}! A digital residency for a borderless world. Your journey starts here.
+              Welcome to eBhutanza. Your digital residency for a borderless world starts here.
             </CardDescription>
           </CardHeader>
           <CardContent>
