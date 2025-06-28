@@ -22,6 +22,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Loader2, UploadCloud } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useLanguage } from '@/context/language-context';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
@@ -35,6 +36,7 @@ export default function ProfilePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const { toast } = useToast();
+  const { t } = useLanguage();
 
   const form = useForm<z.infer<typeof profileSchema>>({
     resolver: zodResolver(profileSchema),
@@ -144,9 +146,9 @@ export default function ProfilePage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Edit Profile</CardTitle>
+        <CardTitle>{t('editProfileTitle')}</CardTitle>
         <CardDescription>
-          Manage your account settings and personal information.
+          {t('editProfileDesc')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -157,7 +159,7 @@ export default function ProfilePage() {
               name="profilePicture"
               render={() => (
                 <FormItem>
-                  <FormLabel>Profile Photo</FormLabel>
+                  <FormLabel>{t('profilePhoto')}</FormLabel>
                   <div className="flex items-center gap-6">
                     <Avatar className="h-24 w-24">
                       <AvatarImage src={imagePreview || 'https://placehold.co/100x100.png'} alt="User profile" data-ai-hint="person avatar"/>
@@ -169,13 +171,13 @@ export default function ProfilePage() {
                         <Button asChild variant="outline">
                             <label htmlFor="picture-upload" className="cursor-pointer">
                                 <UploadCloud className="mr-2" />
-                                Upload Photo
+                                {t('uploadPhoto')}
                                 <input id="picture-upload" type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
                             </label>
                         </Button>
                     </FormControl>
                   </div>
-                  <FormDescription>A square image is recommended.</FormDescription>
+                  <FormDescription>{t('squareImageRecommended')}</FormDescription>
                    <FormMessage />
                 </FormItem>
               )}
@@ -185,7 +187,7 @@ export default function ProfilePage() {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>{t('fullNameLabel')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Tashi Delek" {...field} />
                   </FormControl>
@@ -198,12 +200,12 @@ export default function ProfilePage() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel>{t('emailAddressLabel')}</FormLabel>
                   <FormControl>
                     <Input type="email" {...field} disabled />
                   </FormControl>
                   <FormDescription>
-                    Changing your email requires a secure verification process.
+                    {t('emailChangeDesc')}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -211,7 +213,7 @@ export default function ProfilePage() {
             />
             <Button type="submit" disabled={isSaving}>
               {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Save Changes
+              {t('saveChanges')}
             </Button>
           </form>
         </Form>

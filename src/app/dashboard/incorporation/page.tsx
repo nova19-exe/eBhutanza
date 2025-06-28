@@ -19,6 +19,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Loader2 } from 'lucide-react';
+import { useLanguage } from '@/context/language-context';
 
 const incorporationSchema = z.object({
   companyName: z.string().min(3, 'Company name must be at least 3 characters.'),
@@ -28,6 +29,7 @@ const incorporationSchema = z.object({
 
 export default function IncorporationPage() {
     const { toast } = useToast();
+    const { t } = useLanguage();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
     const form = useForm<z.infer<typeof incorporationSchema>>({
@@ -55,9 +57,9 @@ export default function IncorporationPage() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Incorporate Your Business</CardTitle>
+                <CardTitle>{t('incorporateBusiness')}</CardTitle>
                 <CardDescription>
-                    Fill in your company details below to begin the incorporation process. This service is available after e-residency approval.
+                    {t('incorporateBusinessDesc')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
@@ -68,12 +70,12 @@ export default function IncorporationPage() {
                             name="companyName"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Proposed Company Name</FormLabel>
+                                    <FormLabel>{t('companyName')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="Druk Innovations" {...field} />
                                     </FormControl>
                                     <FormDescription>
-                                        The name will be checked for availability.
+                                        {t('companyNameDesc')}
                                     </FormDescription>
                                     <FormMessage />
                                 </FormItem>
@@ -84,17 +86,17 @@ export default function IncorporationPage() {
                             name="companyType"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Company Type</FormLabel>
+                                    <FormLabel>{t('companyType')}</FormLabel>
                                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                                         <FormControl>
                                             <SelectTrigger>
-                                                <SelectValue placeholder="Select a legal entity type" />
+                                                <SelectValue placeholder={t('companyTypePlaceholder')} />
                                             </SelectTrigger>
                                         </FormControl>
                                         <SelectContent>
-                                            <SelectItem value="private-limited">Private Limited Company</SelectItem>
-                                            <SelectItem value="sole-proprietorship">Sole Proprietorship</SelectItem>
-                                            <SelectItem value="public-limited">Public Limited Company</SelectItem>
+                                            <SelectItem value="private-limited">{t('privateLimited')}</SelectItem>
+                                            <SelectItem value="sole-proprietorship">{t('soleProprietorship')}</SelectItem>
+                                            <SelectItem value="public-limited">{t('publicLimited')}</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     <FormMessage />
@@ -106,7 +108,7 @@ export default function IncorporationPage() {
                             name="businessActivity"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Principal Business Activity</FormLabel>
+                                    <FormLabel>{t('businessActivity')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="e.g., Software development, consulting" {...field} />
                                     </FormControl>
@@ -117,7 +119,7 @@ export default function IncorporationPage() {
 
                         <Button type="submit" size="lg" disabled={isSubmitting}>
                             {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                            Submit for Incorporation
+                            {t('submitForIncorporation')}
                         </Button>
                     </form>
                 </Form>

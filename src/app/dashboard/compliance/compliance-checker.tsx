@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge, BadgeProps } from '@/components/ui/badge';
 import { AlertTriangle, CheckCircle2, ListChecks, Loader2, MinusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/context/language-context';
 
 const formSchema = z.object({
   applicantData: z.string().min(50, {
@@ -23,6 +24,7 @@ export function ComplianceChecker() {
   const [assessment, setAssessment] = useState<ComplianceRiskAssessmentOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -74,10 +76,10 @@ export function ComplianceChecker() {
             name="applicantData"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Applicant Data</FormLabel>
+                <FormLabel>{t('applicantData')}</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder="Paste comprehensive data about the applicant, including personal information, business history, and financial details."
+                    placeholder={t('applicantDataPlaceholder')}
                     className="min-h-[150px]"
                     {...field}
                   />
@@ -88,7 +90,7 @@ export function ComplianceChecker() {
           />
           <Button type="submit" disabled={isLoading}>
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Assess Risk
+            {t('assessRisk')}
           </Button>
         </form>
       </Form>
@@ -101,12 +103,12 @@ export function ComplianceChecker() {
                 <CardHeader>
                     <div className="flex items-center gap-2">
                         {getRiskIcon(assessment.overallRiskLevel)}
-                        <CardTitle>Overall Risk Level</CardTitle>
+                        <CardTitle>{t('overallRiskLevel')}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent>
                     <Badge variant={getRiskBadgeVariant(assessment.overallRiskLevel)} className={cn("text-lg capitalize", assessment.overallRiskLevel === 'low' && "border-chart-2 text-chart-2")}>
-                        {assessment.overallRiskLevel}
+                        {t(assessment.overallRiskLevel)}
                     </Badge>
                 </CardContent>
             </Card>
@@ -114,7 +116,7 @@ export function ComplianceChecker() {
                 <CardHeader>
                     <div className="flex items-center gap-2">
                         <ListChecks className="h-5 w-5 text-primary" />
-                        <CardTitle>Assessment Summary</CardTitle>
+                        <CardTitle>{t('assessmentSummary')}</CardTitle>
                     </div>
                 </CardHeader>
                 <CardContent>
@@ -123,7 +125,7 @@ export function ComplianceChecker() {
             </Card>
              <Card className="md:col-span-2">
                 <CardHeader>
-                    <CardTitle>Flagged Issues</CardTitle>
+                    <CardTitle>{t('flaggedIssues')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     {assessment.flaggedIssues.length > 0 ? (
@@ -139,7 +141,7 @@ export function ComplianceChecker() {
             </Card>
             <Card className="md:col-span-2">
                 <CardHeader>
-                    <CardTitle>Suggested Actions</CardTitle>
+                    <CardTitle>{t('suggestedActions')}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-sm text-muted-foreground">{assessment.suggestedActions}</p>

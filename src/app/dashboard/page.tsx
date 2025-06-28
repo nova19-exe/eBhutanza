@@ -20,10 +20,12 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/lib/firebase/config';
+import { useLanguage } from '@/context/language-context';
 
 
 export default function DashboardPage() {
   const [user, setUser] = React.useState<User | null>(null);
+  const { t } = useLanguage();
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -40,25 +42,25 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-8">
             <Card>
             <CardHeader>
-                <CardTitle>Joen pa Leg So, {userName}!</CardTitle>
+                <CardTitle>{t('welcomeMessage', { userName })}</CardTitle>
                 <CardDescription>
-                Welcome to eBhutanza. Your digital residency for a borderless world starts here.
+                {t('welcomeTitle')}
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="space-y-2">
                 <div className="flex justify-between items-center">
-                    <p className="text-sm font-medium">Application Progress</p>
-                    <p className="text-sm text-muted-foreground">Your application is <span className="font-semibold text-primary">Pending Submission</span>.</p>
+                    <p className="text-sm font-medium">{t('applicationProgress')}</p>
+                    <p className="text-sm text-muted-foreground">{t('applicationStatus')} <span className="font-semibold text-primary">{t('pendingSubmission')}</span>.</p>
                 </div>
                 <Progress value={applicationProgress} className="w-full" animated />
-                <p className="text-sm text-muted-foreground">{applicationProgress}% complete</p>
+                <p className="text-sm text-muted-foreground">{t('percentComplete', { progress: applicationProgress })}</p>
                 </div>
             </CardContent>
             <CardFooter>
                 <Button asChild>
                     <Link href="/dashboard/application">
-                    Continue Application <ArrowRight className="ml-2 h-4 w-4" />
+                    {t('continueApplication')} <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
                 </Button>
             </CardFooter>
@@ -69,19 +71,19 @@ export default function DashboardPage() {
                 <CardHeader>
                 <div className="flex items-center gap-4">
                     <ShieldCheck className="h-8 w-8 text-primary" />
-                    <CardTitle>AI Compliance Check</CardTitle>
+                    <CardTitle>{t('aiComplianceCheck')}</CardTitle>
                 </div>
                 <CardDescription>
-                    Leverage our AI to proactively identify and address potential compliance issues.
+                    {t('aiComplianceCheckDesc')}
                 </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                <p>Analyze applicant data against compliance and risk metrics to proactively flag issues before submission, saving you time and increasing your chances of approval.</p>
+                <p>{t('aiComplianceCheckContent')}</p>
                 </CardContent>
                 <CardFooter>
                 <Button variant="outline" asChild>
                     <Link href="/dashboard/compliance">
-                        Run Check
+                        {t('runCheck')}
                     </Link>
                 </Button>
                 </CardFooter>
@@ -90,19 +92,19 @@ export default function DashboardPage() {
                 <CardHeader>
                 <div className="flex items-center gap-4">
                     <Building2 className="h-8 w-8 text-primary" />
-                    <CardTitle>Business Incorporation</CardTitle>
+                    <CardTitle>{t('businessIncorporation')}</CardTitle>
                 </div>
                 <CardDescription>
-                    Seamlessly register your new company once your e-residency is approved.
+                    {t('businessIncorporationDesc')}
                 </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                <p>Our integration with official registries streamlines the process of establishing your business entity.</p>
+                <p>{t('businessIncorporationContent')}</p>
                 </CardContent>
                 <CardFooter>
                 <Button variant="outline" asChild>
                     <Link href="/dashboard/incorporation">
-                        Learn More
+                        {t('learnMore')}
                     </Link>
                 </Button>
                 </CardFooter>

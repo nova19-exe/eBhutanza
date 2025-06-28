@@ -35,6 +35,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/logo';
 import { Loader2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useLanguage } from '@/context/language-context';
 
 const signUpSchema = z.object({
   fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
@@ -71,6 +72,7 @@ const FormSkeleton = () => (
 
 export default function AuthPage() {
   const [isClient, setIsClient] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setIsClient(true);
@@ -84,8 +86,8 @@ export default function AuthPage() {
         </div>
         <Tabs defaultValue="sign-in" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="sign-in">Sign In</TabsTrigger>
-            <TabsTrigger value="sign-up">Sign Up</TabsTrigger>
+            <TabsTrigger value="sign-in">{t('signIn')}</TabsTrigger>
+            <TabsTrigger value="sign-up">{t('signUp')}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="sign-in">
@@ -105,6 +107,7 @@ function SignInForm() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
 
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
@@ -119,8 +122,8 @@ function SignInForm() {
     try {
       await signInWithEmailAndPassword(auth, values.email, values.password);
       toast({
-        title: 'Signed In',
-        description: 'Welcome back!',
+        title: t('signIn'),
+        description: t('welcomeMessage', { userName: '' }),
       });
       sessionStorage.setItem('justLoggedIn', 'true');
       router.push('/dashboard');
@@ -141,9 +144,9 @@ function SignInForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sign In</CardTitle>
+        <CardTitle>{t('signIn')}</CardTitle>
         <CardDescription>
-          Access your eBhutanza dashboard.
+          {t('accessDashboard')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -154,7 +157,7 @@ function SignInForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('emailLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -171,7 +174,7 @@ function SignInForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('passwordLabel')}</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
@@ -181,7 +184,7 @@ function SignInForm() {
             />
             <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign In
+              {t('signIn')}
             </Button>
           </form>
         </Form>
@@ -194,6 +197,7 @@ function SignUpForm() {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useLanguage();
 
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
@@ -241,9 +245,9 @@ function SignUpForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sign Up</CardTitle>
+        <CardTitle>{t('signUp')}</CardTitle>
         <CardDescription>
-          Create your eBhutanza account to get started.
+          {t('createAccount')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -254,12 +258,12 @@ function SignUpForm() {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>{t('fullNameLabel')}</FormLabel>
                   <FormControl>
                     <Input placeholder="Tashi Delek" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Must be as per your government-issued documents.
+                    {t('fullNameGovDocs')}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -270,7 +274,7 @@ function SignUpForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('emailLabel')}</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
@@ -287,12 +291,12 @@ function SignUpForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>{t('passwordLabel')}</FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Must be at least 8 characters long.
+                    {t('passwordMinChars')}
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -300,7 +304,7 @@ function SignUpForm() {
             />
             <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Account
+              {t('createAccountButton')}
             </Button>
           </form>
         </Form>

@@ -18,6 +18,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { Upload, PenSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useLanguage } from '@/context/language-context';
 
 const applicationSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters.'),
@@ -29,6 +30,7 @@ const applicationSchema = z.object({
 
 export default function ApplicationPage() {
     const { toast } = useToast();
+    const { t } = useLanguage();
 
     const form = useForm<z.infer<typeof applicationSchema>>({
         resolver: zodResolver(applicationSchema),
@@ -56,8 +58,8 @@ export default function ApplicationPage() {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Personal Information</CardTitle>
-                        <CardDescription>This information should match your official documents.</CardDescription>
+                        <CardTitle>{t('personalInfo')}</CardTitle>
+                        <CardDescription>{t('personalInfoDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -66,7 +68,7 @@ export default function ApplicationPage() {
                                 name="fullName"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Full Name</FormLabel>
+                                        <FormLabel>{t('fullNameLabel')}</FormLabel>
                                         <FormControl>
                                             <Input placeholder="Tashi Delek" {...field} />
                                         </FormControl>
@@ -79,7 +81,7 @@ export default function ApplicationPage() {
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Email Address</FormLabel>
+                                        <FormLabel>{t('emailAddressLabel')}</FormLabel>
                                         <FormControl>
                                             <Input placeholder="tashi@druknet.bt" type="email" {...field} />
                                         </FormControl>
@@ -93,7 +95,7 @@ export default function ApplicationPage() {
                             name="country"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Country of Citizenship</FormLabel>
+                                    <FormLabel>{t('countryOfCitizenship')}</FormLabel>
                                     <FormControl>
                                         <Input placeholder="e.g. Bhutan" {...field} />
                                     </FormControl>
@@ -106,8 +108,8 @@ export default function ApplicationPage() {
 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Document Upload (KYC/AML)</CardTitle>
-                        <CardDescription>Securely upload a clear, full-page scan of your passport. This will be used for verification.</CardDescription>
+                        <CardTitle>{t('documentUpload')}</CardTitle>
+                        <CardDescription>{t('documentUploadDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                          <FormField
@@ -115,14 +117,14 @@ export default function ApplicationPage() {
                             name="passportFile"
                             render={() => (
                                 <FormItem>
-                                    <FormLabel>Passport Scan</FormLabel>
+                                    <FormLabel>{t('passportScan')}</FormLabel>
                                     <FormControl>
                                         <div className="relative flex items-center justify-center w-full">
                                             <label htmlFor="passport-upload" className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-card hover:bg-muted">
                                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                                     <Upload className="w-10 h-10 mb-3 text-muted-foreground" />
-                                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                                    <p className="text-xs text-muted-foreground">PDF, PNG, JPG (MAX. 5MB)</p>
+                                                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">{t('clickToUpload')}</span> {t('dragAndDrop')}</p>
+                                                    <p className="text-xs text-muted-foreground">{t('fileTypes')}</p>
                                                 </div>
                                                 <Input id="passport-upload" type="file" className="hidden" {...passportFileRef} />
                                             </label>
@@ -137,8 +139,8 @@ export default function ApplicationPage() {
                 
                 <Card>
                     <CardHeader>
-                        <CardTitle>Digital Signature</CardTitle>
-                        <CardDescription>By typing your full name, you are digitally signing this application and agreeing to our terms and conditions.</CardDescription>
+                        <CardTitle>{t('digitalSignature')}</CardTitle>
+                        <CardDescription>{t('digitalSignatureDesc')}</CardDescription>
                     </CardHeader>
                     <CardContent>
                          <FormField
@@ -146,10 +148,10 @@ export default function ApplicationPage() {
                             name="signature"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Agreement Signature</FormLabel>
+                                    <FormLabel>{t('agreementSignature')}</FormLabel>
                                     <FormControl>
                                         <div className="relative">
-                                            <Input placeholder="Type your full name to sign" {...field} className="pl-10 text-2xl h-14 font-headline" />
+                                            <Input placeholder={t('fullNameLabel')} {...field} className="pl-10 text-2xl h-14 font-headline" />
                                             <PenSquare className="absolute w-6 h-6 text-muted-foreground left-2 top-1/2 -translate-y-1/2" />
                                         </div>
                                     </FormControl>
@@ -160,7 +162,7 @@ export default function ApplicationPage() {
                     </CardContent>
                 </Card>
 
-                <Button type="submit" size="lg" className="w-full md:w-auto">Submit Application</Button>
+                <Button type="submit" size="lg" className="w-full md:w-auto">{t('submitApplication')}</Button>
             </form>
         </Form>
     );

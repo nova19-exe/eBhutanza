@@ -170,6 +170,8 @@ export default function DashboardLayout({
                             <SelectContent>
                                 <SelectItem value="en">{t('english')}</SelectItem>
                                 <SelectItem value="dz">{t('dzongkha')}</SelectItem>
+                                <SelectItem value="es">{t('spanish')}</SelectItem>
+                                <SelectItem value="fr">{t('french')}</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
