@@ -44,6 +44,7 @@ const translations: Translations = {
   applicationProgress: { en: 'Application Progress', dz: 'ཞུ་ཡིག་གི་འ پیشرفت', es: 'Progreso de la Solicitud', fr: 'Progression de la Demande' },
   applicationStatus: { en: 'Your application is', dz: 'ཁྱེད་རང་གི་ཞུ་ཡིག་འདི།', es: 'Tu solicitud está', fr: 'Votre demande est' },
   pendingSubmission: { en: 'Pending Submission', dz: '제출 보류 중', es: 'Pendiente de Envío', fr: 'En attente de soumission' },
+  submittedForReview: { en: 'Submitted for Review', dz: 'བསྐྱར་ཞིབ་འབད་ནིའི་དོན་ལུ་བཙུགས་ཡོད།', es: 'Enviado para Revisión', fr: 'Soumis pour Examen' },
   percentComplete: { en: '{progress}% complete', dz: '{progress}% ཚར་ཡོད།', es: '{progress}% completado', fr: '{progress}% terminé' },
   continueApplication: { en: 'Continue Application', dz: 'ཞུ་ཡིག་མུ་མཐུད་འབད།', es: 'Continuar Solicitud', fr: "Continuer la demande" },
   aiComplianceCheck: { en: 'AI Compliance Check', dz: 'AI མཐུན་རྐྱེན་ཞིབ་དཔྱད།', es: 'Verificación de Cumplimiento IA', fr: 'Vérification de Conformité IA' },
@@ -70,6 +71,8 @@ const translations: Translations = {
   digitalSignatureDesc: { en: 'By typing your full name, you are digitally signing this application and agreeing to our terms and conditions.', dz: 'ཁྱེད་རང་གི་མིང་གཏམ་ཡིག་དཔར་བསྐྲུན་ཏེ་ ཞུ་ཡིག་འདི་ནང་ཌི་ཇི་ཊཱལ་ཐོག་ལས་ས་རྟགས་བཀོད་དེ་ ང་བཅས་ཀྱི་གནས་སྟངས་དང་ཆ་རྐྱེན་ཚུ་དང་མཐུན་པ་ཡོད།', es: 'Al escribir su nombre completo, está firmando digitalmente esta solicitud y aceptando nuestros términos y condiciones.', fr: "En tapant votre nom complet, vous signez numériquement cette demande et acceptez nos termes et conditions." },
   agreementSignature: { en: 'Agreement Signature', dz: 'ስምምነት ፊርማ', es: 'Firma del Acuerdo', fr: "Signature de l'accord" },
   submitApplication: { en: 'Submit Application', dz: 'ཞུ་ཡིག་བཙུགས།', es: 'Enviar Solicitud', fr: 'Soumettre la demande' },
+  applicationSubmitted: { en: 'Application Submitted', dz: 'ཞུ་ཡིག་བཙུགས་ཚར་ཡི།', es: 'Solicitud Enviada', fr: 'Demande soumise' },
+  applicationSubmittedDesc: { en: 'Your application has been successfully submitted for review.', dz: 'ཁྱེད་རང་གི་ཞུ་ཡིག་བསྐྱར་ཞིབ་འབད་ནིའི་དོན་ལུ་ལེགས་ཤོམ་སྦེ་བཙུགས་ཚར་ཡི།', es: 'Su solicitud ha sido enviada con éxito para su revisión.', fr: 'Votre demande a été soumise avec succès pour examen.' },
 
   // Compliance Page
   aiPoweredCompliance: { en: 'AI-Powered Compliance & Risk Assessment', dz: 'AI-Powered Compliance & Risk Assessment', es: 'Evaluación de Riesgos y Cumplimiento con IA', fr: "Évaluation de la conformité et des risques optimisée par l'IA" },

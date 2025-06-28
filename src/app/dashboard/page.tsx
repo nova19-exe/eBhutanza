@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   ArrowRight,
   Building2,
@@ -24,18 +24,30 @@ import { useLanguage } from '@/context/language-context';
 
 
 export default function DashboardPage() {
-  const [user, setUser] = React.useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const { t } = useLanguage();
+  const [applicationProgress, setApplicationProgress] = useState(25);
+  const [statusKey, setStatusKey] = useState('pendingSubmission');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
         setUser(currentUser);
     });
+
+    // Load application status from localStorage
+    const savedProgress = localStorage.getItem('applicationProgress');
+    const savedStatusKey = localStorage.getItem('applicationStatusKey');
+    if (savedProgress) {
+        setApplicationProgress(parseInt(savedProgress, 10));
+    }
+    if (savedStatusKey) {
+        setStatusKey(savedStatusKey);
+    }
+
     return () => unsubscribe();
   }, []);
 
   const userName = user?.displayName || user?.email?.split('@')[0] || 'User';
-  const applicationProgress = 25;
 
   return (
     <>
@@ -51,9 +63,9 @@ export default function DashboardPage() {
                 <div className="space-y-2">
                 <div className="flex justify-between items-center">
                     <p className="text-sm font-medium">{t('applicationProgress')}</p>
-                    <p className="text-sm text-muted-foreground">{t('applicationStatus')} <span className="font-semibold text-primary">{t('pendingSubmission')}</span>.</p>
+                    <p className="text-sm text-muted-foreground">{t('applicationStatus')} <span className="font-semibold text-primary">{t(statusKey)}</span>.</p>
                 </div>
-                <Progress value={applicationProgress} className="w-full" animated />
+                <Progress value={applicationProgress} className="w-full" animated={applicationProgress < 100} />
                 <p className="text-sm text-muted-foreground">{t('percentComplete', { progress: applicationProgress })}</p>
                 </div>
             </CardContent>

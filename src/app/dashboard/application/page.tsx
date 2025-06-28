@@ -19,6 +19,7 @@ import { Separator } from '@/components/ui/separator';
 import { Upload, PenSquare } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/context/language-context';
+import { useRouter } from 'next/navigation';
 
 const applicationSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters.'),
@@ -31,6 +32,7 @@ const applicationSchema = z.object({
 export default function ApplicationPage() {
     const { toast } = useToast();
     const { t } = useLanguage();
+    const router = useRouter();
 
     const form = useForm<z.infer<typeof applicationSchema>>({
         resolver: zodResolver(applicationSchema),
@@ -46,11 +48,18 @@ export default function ApplicationPage() {
 
     function onSubmit(values: z.infer<typeof applicationSchema>) {
         console.log(values);
+        
+        // Persist status change to be reflected on dashboard
+        localStorage.setItem('applicationProgress', '100');
+        localStorage.setItem('applicationStatusKey', 'submittedForReview');
+
         toast({
-            title: "Application Submitted",
-            description: "Your application has been successfully submitted for review.",
-            variant: 'default',
+            title: t('applicationSubmitted'),
+            description: t('applicationSubmittedDesc'),
         });
+
+        // Redirect to dashboard to see the change
+        router.push('/dashboard');
     }
 
     return (
