@@ -11,9 +11,27 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Initialize Firebase
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-const auth = getAuth(app);
-const storage = getStorage(app);
+// Check if all required environment variables are present
+const isFirebaseConfigured = () => {
+  return (
+    firebaseConfig.apiKey &&
+    firebaseConfig.authDomain &&
+    firebaseConfig.projectId &&
+    firebaseConfig.storageBucket &&
+    firebaseConfig.messagingSenderId &&
+    firebaseConfig.appId
+  );
+};
+
+// Initialize Firebase only if all config is present
+let app: any = null;
+let auth: any = null;
+let storage: any = null;
+
+if (typeof window !== 'undefined' && isFirebaseConfigured()) {
+  app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+  auth = getAuth(app);
+  storage = getStorage(app);
+}
 
 export { app, auth, storage };

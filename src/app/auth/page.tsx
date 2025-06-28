@@ -118,6 +118,15 @@ function SignInForm() {
   });
 
   async function onSubmit(values: z.infer<typeof signInSchema>) {
+    if (!auth) {
+      toast({
+        variant: 'destructive',
+        title: 'Authentication Error',
+        description: 'Firebase is not properly configured. Please check your environment variables.',
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(auth, values.email, values.password);
