@@ -20,29 +20,17 @@ import {
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
-function WelcomeFrame({ userName }: { userName: string }) {
-  // The welcome frame is now a simple presentational component.
-  // It takes up the full screen height because the header will be hidden initially.
+function WelcomeFrame() {
   return (
     <div className="relative -m-4 flex h-screen w-auto flex-col items-center justify-center overflow-hidden text-foreground sm:-m-6">
       <Image
-        src="https://placehold.co/1920x1080.png"
-        alt="A monastery in the mountains of Bhutan, representing eBhutanza's digital residency."
+        src="https://storage.googleapis.com/fcp-stg-testing-images/eBhutanza-hero.png"
+        alt="eBhutanza welcome hero image with a monastery in the mountains."
         fill
         objectFit="cover"
         className="z-0"
-        data-ai-hint="Bhutan landscape monastery"
         priority
       />
-      <div className="absolute inset-0 z-0 bg-black/50" />
-      <div className="relative z-10 text-center text-white drop-shadow-2xl">
-        <h1 className="text-5xl font-bold font-headline md:text-7xl">
-          Joen pa Leg So, {userName}
-        </h1>
-        <p className="mt-4 text-lg md:text-xl">
-          Your journey to a borderless world begins now.
-        </p>
-      </div>
     </div>
   );
 }
@@ -84,7 +72,7 @@ export default function DashboardPage() {
   return (
     <>
       {/* WelcomeFrame is at the top of the page flow. */}
-      <WelcomeFrame userName={userName} />
+      <WelcomeFrame />
 
       {/* This ref is the scroll target. */}
       <div ref={mainContentRef} className="flex flex-col gap-8 pt-8">
@@ -92,7 +80,7 @@ export default function DashboardPage() {
           <CardHeader>
             <CardTitle>Welcome to eBhutanza</CardTitle>
             <CardDescription>
-              A digital residency for a borderless world. Your journey starts here.
+              Joen pa Leg So, {userName}! A digital residency for a borderless world. Your journey starts here.
             </CardDescription>
           </CardHeader>
           <CardContent>
