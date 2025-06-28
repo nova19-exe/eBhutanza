@@ -34,7 +34,7 @@ export default function DashboardPage() {
               <p className="text-sm font-medium">Application Progress</p>
               <p className="text-sm text-muted-foreground">Your application is <span className="font-semibold text-primary">Pending Submission</span>.</p>
             </div>
-            <Progress value={applicationProgress} className="w-full" />
+            <Progress value={applicationProgress} className="w-full" animated />
             <p className="text-sm text-muted-foreground">{applicationProgress}% complete</p>
           </div>
         </CardContent>
