@@ -9,8 +9,7 @@ import {
   LayoutDashboard,
   Loader2,
   LogOut,
-  Settings,
-  ShieldCheck,
+  Globe,
   User as UserIcon,
 } from 'lucide-react';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
@@ -25,6 +24,7 @@ import {
   SidebarMenuButton,
   SidebarInset,
   SidebarTrigger,
+  SidebarFooter,
 } from '@/components/ui/sidebar';
 import { Logo } from '@/components/logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -37,17 +37,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 import { auth } from '@/lib/firebase/config';
+import { useLanguage } from '@/context/language-context';
 
-const menuItems = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/application', label: 'My Application', icon: FileText },
-  { href: '/dashboard/compliance', label: 'AI Compliance', icon: ShieldCheck },
-  { href: '/dashboard/incorporation', label: 'Incorporate', icon: Building2 },
-];
-
-const WelcomeFrame = ({ isVisible, userName }: { isVisible: boolean, userName: string }) => {
+const WelcomeFrame = ({ isVisible, userName, t }: { isVisible: boolean, userName: string, t: (key: string, params?: any) => string }) => {
     return (
       <div className={cn(
           "fixed inset-0 z-50 flex h-screen w-full flex-col items-center justify-center bg-background text-center transition-opacity duration-700 ease-out",
@@ -58,7 +53,7 @@ const WelcomeFrame = ({ isVisible, userName }: { isVisible: boolean, userName: s
           isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
         )}>
           <h1 className="text-5xl font-bold tracking-tight text-foreground md:text-7xl font-headline">
-            Joen pa Leg So, {userName}
+            {t('welcomeMessage', { userName })}
           </h1>
         </div>
       </div>
@@ -72,6 +67,15 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
+  const { language, setLanguage, t } = useLanguage();
+
+  const menuItems = [
+    { href: '/dashboard', label: t('dashboard'), icon: LayoutDashboard },
+    { href: '/dashboard/application', label: t('myApplication'), icon: FileText },
+    { href: '/dashboard/compliance', label: t('aiCompliance'), icon: ShieldCheck },
+    { href: '/dashboard/incorporation', label: t('incorporate'), icon: Building2 },
+  ];
+
   const [isWelcoming, setIsWelcoming] = React.useState(false);
   const [authLoading, setAuthLoading] = React.useState(true);
   const [user, setUser] = React.useState<User | null>(null);
@@ -121,10 +125,12 @@ export default function DashboardLayout({
       </div>
     );
   }
+  
+  const currentLabel = menuItems.find((item) => pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard'))?.label || t('dashboard');
 
   return (
     <SidebarProvider>
-        <WelcomeFrame isVisible={isWelcoming} userName={user?.displayName || user?.email?.split('@')[0] || 'User'}/>
+        <WelcomeFrame isVisible={isWelcoming} userName={user?.displayName || user?.email?.split('@')[0] || 'User'} t={t} />
         <div className={cn(
             "flex w-full transition-opacity duration-1000",
             !isWelcoming ? "opacity-100 delay-300" : "opacity-0"
@@ -150,13 +156,29 @@ export default function DashboardLayout({
                     ))}
                 </SidebarMenu>
                 </SidebarContent>
+                <SidebarFooter>
+                    <div className="p-2">
+                        <Select onValueChange={setLanguage} value={language}>
+                            <SelectTrigger className="w-full">
+                                <div className="flex items-center gap-2">
+                                    <Globe />
+                                    <SelectValue placeholder="Language" />
+                                </div>
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="en">{t('english')}</SelectItem>
+                                <SelectItem value="dz">{t('dzongkha')}</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </SidebarFooter>
             </Sidebar>
             <SidebarInset>
                 <header data-layout-element="header" className="flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur-sm lg:px-6">
                     <div className="flex items-center gap-4">
                         <SidebarTrigger />
                         <h1 className="text-xl font-semibold md:text-2xl font-headline">
-                            {menuItems.find((item) => pathname.startsWith(item.href) && (item.href !== '/dashboard' || pathname === '/dashboard'))?.label || 'Dashboard'}
+                           {currentLabel}
                         </h1>
                     </div>
                      <DropdownMenu>
@@ -178,16 +200,16 @@ export default function DashboardLayout({
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onSelect={() => router.push('/dashboard/profile')}>
                                 <UserIcon className="mr-2 h-4 w-4" />
-                                <span>Edit Profile</span>
+                                <span>{t('editProfile')}</span>
                             </DropdownMenuItem>
                             <DropdownMenuItem onSelect={() => router.push('/dashboard/settings')}>
                                 <Settings className="mr-2 h-4 w-4" />
-                                <span>Settings</span>
+                                <span>{t('settings')}</span>
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={handleLogout}>
                                 <LogOut className="mr-2 h-4 w-4" />
-                                <span>Log Out</span>
+                                <span>{t('logOut')}</span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
