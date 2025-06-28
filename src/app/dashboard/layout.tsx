@@ -2,13 +2,15 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   Building2,
   FileText,
   LayoutDashboard,
+  Loader2,
   ShieldCheck,
 } from 'lucide-react';
+import { onAuthStateChanged, User } from 'firebase/auth';
 
 import {
   SidebarProvider,
@@ -24,6 +26,7 @@ import {
 import { Logo } from '@/components/logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
+import { auth } from '@/lib/firebase/config';
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -32,7 +35,7 @@ const menuItems = [
   { href: '/dashboard/incorporation', label: 'Incorporate', icon: Building2 },
 ];
 
-const WelcomeFrame = ({ isVisible }: { isVisible: boolean }) => {
+const WelcomeFrame = ({ isVisible, userName }: { isVisible: boolean, userName: string }) => {
     return (
       <div className={cn(
           "fixed inset-0 z-50 flex h-screen w-full flex-col items-center justify-center bg-background text-center transition-opacity duration-700 ease-out",
@@ -43,7 +46,7 @@ const WelcomeFrame = ({ isVisible }: { isVisible: boolean }) => {
           isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
         )}>
           <h1 className="text-5xl font-bold tracking-tight text-foreground md:text-7xl font-headline">
-            Welcome, Tashi Delek
+            Joen pa Leg So, {userName}
           </h1>
         </div>
       </div>
@@ -56,19 +59,51 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isWelcoming, setIsWelcoming] = React.useState(true);
+  const router = useRouter();
+  const [isWelcoming, setIsWelcoming] = React.useState(false);
+  const [authLoading, setAuthLoading] = React.useState(true);
+  const [user, setUser] = React.useState<User | null>(null);
+
 
   React.useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsWelcoming(false);
-    }, 2000); // 2-second delay
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+        const justLoggedIn = sessionStorage.getItem('justLoggedIn');
+        if (justLoggedIn) {
+          setIsWelcoming(true);
+          sessionStorage.removeItem('justLoggedIn');
+        }
+        setAuthLoading(false);
+      } else {
+        router.push('/auth');
+      }
+    });
 
-    return () => clearTimeout(timer);
-  }, []);
+    return () => unsubscribe();
+  }, [router]);
+
+  React.useEffect(() => {
+    if (isWelcoming) {
+      const timer = setTimeout(() => {
+        setIsWelcoming(false);
+      }, 2000); // 2-second delay
+
+      return () => clearTimeout(timer);
+    }
+  }, [isWelcoming]);
+
+  if (authLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-background">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>
-        <WelcomeFrame isVisible={isWelcoming} />
+        <WelcomeFrame isVisible={isWelcoming} userName={user?.email?.split('@')[0] || 'User'}/>
         <div className={cn(
             "flex w-full transition-opacity duration-1000",
             !isWelcoming ? "opacity-100 delay-300" : "opacity-0"
@@ -105,8 +140,8 @@ export default function DashboardLayout({
                     </div>
                     <div className="flex items-center gap-4">
                         <Avatar>
-                            <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="person avatar" />
-                            <AvatarFallback>BT</AvatarFallback>
+                            <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="person avatar"/>
+                            <AvatarFallback>{user?.email?.substring(0,2).toUpperCase() || 'U'}</AvatarFallback>
                         </Avatar>
                     </div>
                 </header>

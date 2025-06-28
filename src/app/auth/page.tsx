@@ -90,6 +90,7 @@ function SignInForm() {
         title: 'Signed In',
         description: 'Welcome back!',
       });
+      sessionStorage.setItem('justLoggedIn', 'true');
       router.push('/dashboard');
     } catch (error: any) {
       const errorMessage = error.code === 'auth/invalid-credential' 
@@ -182,6 +183,7 @@ function SignUpForm() {
         title: 'Account Created',
         description: "Welcome to eBhutanza! You've been signed in.",
       });
+      sessionStorage.setItem('justLoggedIn', 'true');
       router.push('/dashboard');
     } catch (error: any) {
       const errorMessage = error.code === 'auth/email-already-in-use'

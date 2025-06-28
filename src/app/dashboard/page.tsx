@@ -18,10 +18,21 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from '@/lib/firebase/config';
 
 
 export default function DashboardPage() {
-  const userName = 'Tashi Delek';
+  const [user, setUser] = React.useState<User | null>(null);
+
+  React.useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const userName = user?.email?.split('@')[0] || 'User';
   const applicationProgress = 25;
 
   return (
