@@ -26,26 +26,35 @@ import { useLanguage } from '@/context/language-context';
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const { t } = useLanguage();
-  const [applicationProgress, setApplicationProgress] = useState(25);
+  const [applicationProgress, setApplicationProgress] = useState(0);
   const [statusKey, setStatusKey] = useState('pendingSubmission');
 
   useEffect(() => {
+    const updateUserStatus = () => {
+        if (user) {
+            const savedProgress = localStorage.getItem(`applicationProgress_${user.uid}`);
+            const savedStatusKey = localStorage.getItem(`applicationStatusKey_${user.uid}`);
+            
+            setApplicationProgress(savedProgress ? parseInt(savedProgress, 10) : 0);
+            setStatusKey(savedStatusKey || 'pendingSubmission');
+        }
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser);
+      setUser(currentUser);
     });
 
-    // Load application status from localStorage
-    const savedProgress = localStorage.getItem('applicationProgress');
-    const savedStatusKey = localStorage.getItem('applicationStatusKey');
-    if (savedProgress) {
-        setApplicationProgress(parseInt(savedProgress, 10));
-    }
-    if (savedStatusKey) {
-        setStatusKey(savedStatusKey);
-    }
+    updateUserStatus();
+    
+    window.addEventListener('storage', updateUserStatus);
+    document.addEventListener('visibilitychange', updateUserStatus)
 
-    return () => unsubscribe();
-  }, []);
+    return () => {
+        unsubscribe();
+        window.removeEventListener('storage', updateUserStatus);
+        document.removeEventListener('visibilitychange', updateUserStatus);
+    };
+  }, [user]);
 
   const userName = user?.displayName || user?.email?.split('@')[0] || 'User';
 
@@ -69,13 +78,15 @@ export default function DashboardPage() {
                 <p className="text-sm text-muted-foreground">{t('percentComplete', { progress: applicationProgress })}</p>
                 </div>
             </CardContent>
-            <CardFooter>
-                <Button asChild>
-                    <Link href="/dashboard/application">
-                    {t('continueApplication')} <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                </Button>
-            </CardFooter>
+            {applicationProgress < 100 && (
+                <CardFooter>
+                    <Button asChild>
+                        <Link href="/dashboard/application">
+                        {t('continueApplication')} <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                    </Button>
+                </CardFooter>
+            )}
             </Card>
 
             <div className="grid gap-6 md:grid-cols-2">
