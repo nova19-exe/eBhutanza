@@ -20,30 +20,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
-function WelcomeFrame({ userName, mainContentRef }: { userName: string; mainContentRef: React.RefObject<HTMLDivElement> }) {
-  useEffect(() => {
-    // Hide the main scrollbar while the welcome frame is visible
-    document.body.style.overflow = 'hidden';
-
-    const scrollTimer = setTimeout(() => {
-      // Scroll to the main content
-      mainContentRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-      // Restore the scrollbar after the animation has had time to complete
-      setTimeout(() => {
-        document.body.style.overflow = 'auto';
-      }, 1500); 
-    }, 3000); // Wait 3 seconds before scrolling
-
-    // Cleanup function to clear timers and restore scrollbar if the user navigates away
-    return () => {
-      clearTimeout(scrollTimer);
-      document.body.style.overflow = 'auto';
-    };
-  }, [mainContentRef]);
-
+function WelcomeFrame({ userName }: { userName: string }) {
+  // The welcome frame is now a simple presentational component.
+  // It takes up the full screen height because the header will be hidden initially.
   return (
-    <div className="relative -m-4 flex h-[calc(100vh_-_3.5rem)] w-auto flex-col items-center justify-center overflow-hidden text-foreground sm:-m-6">
+    <div className="relative -m-4 flex h-screen w-auto flex-col items-center justify-center overflow-hidden text-foreground sm:-m-6">
       <Image
         src="https://placehold.co/1920x1080.png"
         alt="A monastery in the mountains of Bhutan, representing eBhutanza's digital residency."
@@ -56,7 +37,7 @@ function WelcomeFrame({ userName, mainContentRef }: { userName: string; mainCont
       <div className="absolute inset-0 z-0 bg-black/50" />
       <div className="relative z-10 text-center text-white drop-shadow-2xl">
         <h1 className="text-5xl font-bold font-headline md:text-7xl">
-          Welcome, {userName}
+          Joen pa Leg So, {userName}
         </h1>
         <p className="mt-4 text-lg md:text-xl">
           Your journey to a borderless world begins now.
@@ -69,13 +50,43 @@ function WelcomeFrame({ userName, mainContentRef }: { userName: string; mainCont
 
 export default function DashboardPage() {
   const mainContentRef = useRef<HTMLDivElement>(null);
-  const userName = 'Tashi Delek'; // This would come from a user session
+  const userName = 'Tashi Delek';
   const applicationProgress = 25;
+
+  useEffect(() => {
+    // This effect handles the welcome animation orchestration.
+    if (typeof window === 'undefined') return;
+
+    // Add a class to the body to hide layout elements and prevent scrolling.
+    document.body.classList.add('welcoming');
+    document.body.style.overflow = 'hidden';
+
+    const scrollTimer = setTimeout(() => {
+      // Scroll to the main content after 3 seconds.
+      mainContentRef.current?.scrollIntoView({ behavior: 'smooth' });
+
+      // After the scroll animation finishes (approx. 1s), restore the layout and scroll.
+      setTimeout(() => {
+        document.body.style.overflow = 'auto';
+        document.body.classList.remove('welcoming');
+      }, 1000); 
+
+    }, 3000);
+
+    // Cleanup function to restore everything if the component unmounts.
+    return () => {
+      clearTimeout(scrollTimer);
+      document.body.classList.remove('welcoming');
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
 
   return (
     <>
-      <WelcomeFrame userName={userName} mainContentRef={mainContentRef} />
+      {/* WelcomeFrame is at the top of the page flow. */}
+      <WelcomeFrame userName={userName} />
 
+      {/* This ref is the scroll target. */}
       <div ref={mainContentRef} className="flex flex-col gap-8 pt-8">
         <Card>
           <CardHeader>
@@ -134,7 +145,7 @@ export default function DashboardPage() {
               <CardDescription>
                 Seamlessly register your new company once your e-residency is approved.
               </CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent className="flex-grow">
               <p>Our integration with official registries streamlines the process of establishing your business entity.</p>
             </CardContent>

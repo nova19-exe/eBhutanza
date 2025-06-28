@@ -100,3 +100,9 @@
     background-image: linear-gradient(160deg, hsl(263, 54%, 12%) 0%, hsl(340, 50%, 18%) 100%);
   }
 }
+
+/* Hide layout elements during the welcome animation */
+body.welcoming [data-layout-element='sidebar'],
+body.welcoming [data-layout-element='header'] {
+  display: none;
+}
