@@ -145,7 +145,7 @@ export default function DashboardPage() {
               <CardDescription>
                 Seamlessly register your new company once your e-residency is approved.
               </CardDescription>
-            </Header>
+            </CardHeader>
             <CardContent className="flex-grow">
               <p>Our integration with official registries streamlines the process of establishing your business entity.</p>
             </CardContent>
