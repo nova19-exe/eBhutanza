@@ -191,7 +191,7 @@ export default function SettingsPage() {
                                         name="confirmPassword"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Confirm New Password</Label>
+                                                <FormLabel>Confirm New Password</FormLabel>
                                                 <FormControl>
                                                     <Input type="password" {...field} />
                                                 </FormControl>
@@ -209,7 +209,7 @@ export default function SettingsPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Data &amp; Privacy</CardTitle>
+                    <CardTitle>Data & Privacy</CardTitle>
                     <CardDescription>Manage your personal data and account.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
