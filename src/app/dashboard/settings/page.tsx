@@ -19,6 +19,7 @@ import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { Info } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Label } from '@/components/ui/label';
 
 const passwordSchema = z.object({
   currentPassword: z.string().min(1, 'Current password is required.'),
@@ -68,12 +69,13 @@ export default function SettingsPage() {
                 <CardContent className="space-y-4">
                      <div className="flex items-center justify-between p-4 border rounded-lg">
                         <div className="space-y-0.5">
-                            <FormLabel>Dark Mode</FormLabel>
+                            <Label htmlFor="dark-mode-switch">Dark Mode</Label>
                             <p className="text-sm text-muted-foreground">
                                 Toggles between a light and dark theme.
                             </p>
                         </div>
                         <Switch
+                            id="dark-mode-switch"
                             onCheckedChange={handleThemeToggle}
                             defaultChecked={true}
                         />
@@ -167,4 +169,3 @@ export default function SettingsPage() {
             </Alert>
         </div>
     );
-}
