@@ -32,10 +32,16 @@ const menuItems = [
   { href: '/dashboard/incorporation', label: 'Incorporate', icon: Building2 },
 ];
 
-const WelcomeFrame = () => {
+const WelcomeFrame = ({ isVisible }: { isVisible: boolean }) => {
     return (
-      <div className="fixed inset-0 z-50 flex h-screen w-full flex-col items-center justify-center bg-background text-center">
-        <div className="animate-in fade-in zoom-in-95 duration-1000">
+      <div className={cn(
+          "fixed inset-0 z-50 flex h-screen w-full flex-col items-center justify-center bg-background text-center transition-opacity duration-700 ease-out",
+          isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+        )}>
+        <div className={cn(
+          "transition-all duration-1000",
+          isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+        )}>
           <h1 className="text-5xl font-bold tracking-tight text-foreground md:text-7xl font-headline">
             Welcome, Tashi Delek
           </h1>
@@ -50,11 +56,11 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isReady, setIsReady] = React.useState(false);
+  const [isWelcoming, setIsWelcoming] = React.useState(true);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setIsReady(true);
+      setIsWelcoming(false);
     }, 2000); // 2-second delay
 
     return () => clearTimeout(timer);
@@ -62,8 +68,11 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-        {!isReady && <WelcomeFrame />}
-        <div className={cn("flex w-full", isReady ? "animate-in fade-in duration-1000" : "opacity-0")}>
+        <WelcomeFrame isVisible={isWelcoming} />
+        <div className={cn(
+            "flex w-full transition-opacity duration-1000",
+            !isWelcoming ? "opacity-100 delay-300" : "opacity-0"
+        )}>
             <Sidebar collapsible="icon" data-layout-element="sidebar">
                 <SidebarHeader>
                 <Logo />
