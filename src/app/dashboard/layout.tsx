@@ -45,6 +45,7 @@ const menuItems = [
   { href: '/dashboard/application', label: 'My Application', icon: FileText },
   { href: '/dashboard/compliance', label: 'AI Compliance', icon: ShieldCheck },
   { href: '/dashboard/incorporation', label: 'Incorporate', icon: Building2 },
+  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];
 
 const WelcomeFrame = ({ isVisible, userName }: { isVisible: boolean, userName: string }) => {
@@ -180,7 +181,7 @@ export default function DashboardLayout({
                                 <UserIcon className="mr-2 h-4 w-4" />
                                 <span>Edit Profile</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => router.push('/dashboard/settings')}>
                                 <Settings className="mr-2 h-4 w-4" />
                                 <span>Settings</span>
                             </DropdownMenuItem>
