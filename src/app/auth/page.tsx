@@ -8,6 +8,7 @@ import * as z from 'zod';
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from 'firebase/auth';
 
 import { auth } from '@/lib/firebase/config';
@@ -36,6 +37,7 @@ import { Loader2 } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 const signUpSchema = z.object({
+  fullName: z.string().min(2, { message: 'Full name must be at least 2 characters.' }),
   email: z.string().email({ message: 'Invalid email address.' }),
   password: z
     .string()
@@ -196,6 +198,7 @@ function SignUpForm() {
   const form = useForm<z.infer<typeof signUpSchema>>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
+      fullName: '',
       email: '',
       password: '',
     },
@@ -204,18 +207,24 @@ function SignUpForm() {
   async function onSubmit(values: z.infer<typeof signUpSchema>) {
     setIsLoading(true);
     try {
-      await createUserWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
         values.email,
         values.password
       );
+
+      await updateProfile(userCredential.user, {
+        displayName: values.fullName,
+      });
+
       toast({
         title: 'Account Created',
         description: "Welcome to eBhutanza! You've been signed in.",
       });
       sessionStorage.setItem('justLoggedIn', 'true');
       router.push('/dashboard');
-    } catch (error: any) {
+    } catch (error: any)
+{
       const errorMessage = error.code === 'auth/email-already-in-use'
         ? 'This email address is already in use.'
         : error.message;
@@ -240,6 +249,22 @@ function SignUpForm() {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="fullName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Full Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Tashi Delek" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Must be as per your government-issued documents.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"

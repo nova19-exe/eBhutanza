@@ -103,7 +103,7 @@ export default function DashboardLayout({
 
   return (
     <SidebarProvider>
-        <WelcomeFrame isVisible={isWelcoming} userName={user?.email?.split('@')[0] || 'User'}/>
+        <WelcomeFrame isVisible={isWelcoming} userName={user?.displayName || user?.email?.split('@')[0] || 'User'}/>
         <div className={cn(
             "flex w-full transition-opacity duration-1000",
             !isWelcoming ? "opacity-100 delay-300" : "opacity-0"
@@ -141,7 +141,7 @@ export default function DashboardLayout({
                     <div className="flex items-center gap-4">
                         <Avatar>
                             <AvatarImage src="https://placehold.co/40x40.png" alt="@user" data-ai-hint="person avatar"/>
-                            <AvatarFallback>{user?.email?.substring(0,2).toUpperCase() || 'U'}</AvatarFallback>
+                            <AvatarFallback>{user?.displayName?.substring(0,2).toUpperCase() || user?.email?.substring(0,2).toUpperCase() || 'U'}</AvatarFallback>
                         </Avatar>
                     </div>
                 </header>

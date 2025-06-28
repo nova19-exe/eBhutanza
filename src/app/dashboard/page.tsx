@@ -32,10 +32,11 @@ export default function DashboardPage() {
     return () => unsubscribe();
   }, []);
 
-  const userName = user?.email?.split('@')[0] || 'User';
+  const userName = user?.displayName || user?.email?.split('@')[0] || 'User';
   const applicationProgress = 25;
 
   return (
+    <>
         <div className="flex flex-col gap-8">
             <Card>
             <CardHeader>
@@ -108,5 +109,6 @@ export default function DashboardPage() {
             </Card>
             </div>
         </div>
+    </>
   );
 }
