@@ -11,6 +11,8 @@ import {
   LogOut,
   Globe,
   User as UserIcon,
+  ShieldCheck,
+  Settings,
 } from 'lucide-react';
 import { onAuthStateChanged, User, signOut } from 'firebase/auth';
 
