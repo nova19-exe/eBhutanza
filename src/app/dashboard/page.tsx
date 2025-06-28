@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import Image from 'next/image';
+import React from 'react';
 import {
   ArrowRight,
   Building2,
@@ -20,63 +19,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
-function WelcomeFrame() {
-  return (
-    <div className="relative -m-4 flex h-screen w-auto flex-col items-center justify-center overflow-hidden text-foreground sm:-m-6">
-      <Image
-        src="https://placehold.co/1920x1080.png"
-        alt="eBhutanza welcome hero image with a monastery in the mountains."
-        fill
-        objectFit="cover"
-        className="z-0"
-        priority
-        data-ai-hint="monastery mountains"
-      />
-    </div>
-  );
-}
-
 
 export default function DashboardPage() {
-  const mainContentRef = useRef<HTMLDivElement>(null);
   const userName = 'Tashi Delek';
   const applicationProgress = 25;
 
-  useEffect(() => {
-    // This effect handles the welcome animation orchestration.
-    if (typeof window === 'undefined') return;
-
-    // Add a class to the body to hide layout elements and prevent scrolling.
-    document.body.classList.add('welcoming');
-    document.body.style.overflow = 'hidden';
-
-    const scrollTimer = setTimeout(() => {
-      // Scroll to the main content after 3 seconds.
-      mainContentRef.current?.scrollIntoView({ behavior: 'smooth' });
-
-      // After the scroll animation finishes (approx. 1s), restore the layout and scroll.
-      setTimeout(() => {
-        document.body.style.overflow = 'auto';
-        document.body.classList.remove('welcoming');
-      }, 1000); 
-
-    }, 3000);
-
-    // Cleanup function to restore everything if the component unmounts.
-    return () => {
-      clearTimeout(scrollTimer);
-      document.body.classList.remove('welcoming');
-      document.body.style.overflow = 'auto';
-    };
-  }, []);
-
   return (
-    <>
-      {/* WelcomeFrame is at the top of the page flow. */}
-      <WelcomeFrame />
-
-      {/* This ref is the scroll target. */}
-      <div ref={mainContentRef} className="flex flex-col gap-8 pt-8">
+      <div className="flex flex-col gap-8">
         <Card>
           <CardHeader>
             <CardTitle>Joen pa Leg So, {userName}!</CardTitle>
@@ -148,6 +97,5 @@ export default function DashboardPage() {
           </Card>
         </div>
       </div>
-    </>
   );
 }
