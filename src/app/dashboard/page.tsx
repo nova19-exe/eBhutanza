@@ -1,0 +1,96 @@
+import {
+  ArrowRight,
+  Building2,
+  FileText,
+  ShieldCheck,
+} from 'lucide-react';
+import Link from 'next/link';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+
+export default function DashboardPage() {
+  const applicationProgress = 25;
+
+  return (
+    <div className="flex flex-col gap-8">
+      <Card>
+        <CardHeader>
+          <CardTitle>Welcome to Bhutan eResidency</CardTitle>
+          <CardDescription>
+            Your journey to establishing a digital presence in the Kingdom of Bhutan starts here.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-2">
+            <div className="flex justify-between items-center">
+              <p className="text-sm font-medium">Application Progress</p>
+              <p className="text-sm text-muted-foreground">Your application is <span className="font-semibold text-primary">Pending Submission</span>.</p>
+            </div>
+            <Progress value={applicationProgress} className="w-full" />
+            <p className="text-sm text-muted-foreground">{applicationProgress}% complete</p>
+          </div>
+        </CardContent>
+        <CardFooter>
+            <Button asChild>
+              <Link href="/dashboard/application">
+                Continue Application <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+        </CardFooter>
+      </Card>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="flex flex-col">
+          <CardHeader>
+            <div className="flex items-center gap-4">
+              <ShieldCheck className="h-8 w-8 text-primary" />
+              <CardTitle>AI Compliance Check</CardTitle>
+            </div>
+            <CardDescription>
+              Leverage our AI to proactively identify and address potential compliance issues.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <p>Analyze applicant data against compliance and risk metrics to proactively flag issues before submission, saving you time and increasing your chances of approval.</p>
+          </CardContent>
+          <CardFooter>
+            <Button variant="outline" asChild>
+                <Link href="/dashboard/compliance">
+                    Run Check
+                </Link>
+            </Button>
+          </CardFooter>
+        </Card>
+        <Card className="flex flex-col">
+          <CardHeader>
+            <div className="flex items-center gap-4">
+                <Building2 className="h-8 w-8 text-primary" />
+                <CardTitle>Business Incorporation</CardTitle>
+            </div>
+            <CardDescription>
+              Seamlessly register your new Bhutanese company once your e-residency is approved.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex-grow">
+            <p>Our integration with the Bhutanese Company Registry API streamlines the process of establishing your business in the kingdom.</p>
+          </CardContent>
+           <CardFooter>
+            <Button variant="outline" asChild>
+                <Link href="/dashboard/incorporation">
+                    Learn More
+                </Link>
+            </Button>
+          </CardFooter>
+        </Card>
+      </div>
+    </div>
+  );
+}
