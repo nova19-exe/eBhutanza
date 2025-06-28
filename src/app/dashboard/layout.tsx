@@ -42,11 +42,9 @@ import { auth } from '@/lib/firebase/config';
 
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/dashboard/profile', label: 'Profile', icon: UserIcon },
   { href: '/dashboard/application', label: 'My Application', icon: FileText },
   { href: '/dashboard/compliance', label: 'AI Compliance', icon: ShieldCheck },
   { href: '/dashboard/incorporation', label: 'Incorporate', icon: Building2 },
-  { href: '/dashboard/settings', label: 'Settings', icon: Settings },
 ];
 
 const WelcomeFrame = ({ isVisible, userName }: { isVisible: boolean, userName: string }) => {
