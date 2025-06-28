@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,6 +32,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { Logo } from '@/components/logo';
 import { Loader2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const signUpSchema = z.object({
   email: z.string().email({ message: 'Invalid email address.' }),
@@ -45,7 +46,33 @@ const signInSchema = z.object({
   password: z.string().min(1, { message: 'Password is required.' }),
 });
 
+const FormSkeleton = () => (
+    <Card>
+        <CardHeader>
+            <Skeleton className="h-7 w-24 rounded-md" />
+            <Skeleton className="h-4 w-48 rounded-md mt-2" />
+        </CardHeader>
+        <CardContent className="space-y-4">
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-12 rounded-md" />
+                <Skeleton className="h-10 w-full rounded-md" />
+            </div>
+            <div className="space-y-2">
+                <Skeleton className="h-4 w-16 rounded-md" />
+                <Skeleton className="h-10 w-full rounded-md" />
+            </div>
+            <Skeleton className="h-11 w-full rounded-md" />
+        </CardContent>
+    </Card>
+);
+
 export default function AuthPage() {
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-4">
       <div className="w-full max-w-md">
@@ -57,12 +84,14 @@ export default function AuthPage() {
             <TabsTrigger value="sign-in">Sign In</TabsTrigger>
             <TabsTrigger value="sign-up">Sign Up</TabsTrigger>
           </TabsList>
+          
           <TabsContent value="sign-in">
-            <SignInForm />
+            {isClient ? <SignInForm /> : <FormSkeleton />}
           </TabsContent>
           <TabsContent value="sign-up">
-            <SignUpForm />
+            {isClient ? <SignUpForm /> : <FormSkeleton />}
           </TabsContent>
+
         </Tabs>
       </div>
     </div>
