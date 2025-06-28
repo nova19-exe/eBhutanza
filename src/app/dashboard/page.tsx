@@ -23,9 +23,9 @@ export default function DashboardPage() {
     <div className="flex flex-col gap-8">
       <Card>
         <CardHeader>
-          <CardTitle>Welcome to Bhutan eResidency</CardTitle>
+          <CardTitle>Welcome to eBhutanza</CardTitle>
           <CardDescription>
-            Your journey to establishing a digital presence in the Kingdom of Bhutan starts here.
+            A digital residency for a borderless world. Your journey starts here.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -76,11 +76,11 @@ export default function DashboardPage() {
                 <CardTitle>Business Incorporation</CardTitle>
             </div>
             <CardDescription>
-              Seamlessly register your new Bhutanese company once your e-residency is approved.
+              Seamlessly register your new company once your e-residency is approved.
             </CardDescription>
           </CardHeader>
           <CardContent className="flex-grow">
-            <p>Our integration with the Bhutanese Company Registry API streamlines the process of establishing your business in the kingdom.</p>
+            <p>Our integration with official registries streamlines the process of establishing your business entity.</p>
           </CardContent>
            <CardFooter>
             <Button variant="outline" asChild>

@@ -46,7 +46,7 @@ export default function IncorporationPage() {
             setIsSubmitting(false);
             toast({
                 title: "Incorporation Request Sent",
-                description: `Your request to incorporate "${values.companyName}" has been submitted to the Bhutanese Company Registry.`,
+                description: `Your request to incorporate "${values.companyName}" has been submitted.`,
             });
             form.reset();
         }, 2000);
@@ -55,7 +55,7 @@ export default function IncorporationPage() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Incorporate Your Business in Bhutan</CardTitle>
+                <CardTitle>Incorporate Your Business</CardTitle>
                 <CardDescription>
                     Fill in your company details below to begin the incorporation process. This service is available after e-residency approval.
                 </CardDescription>
