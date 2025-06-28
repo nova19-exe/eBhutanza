@@ -82,29 +82,49 @@ export default function ProfilePage() {
     }
     
     setIsSaving(true);
-    try {
-        const { fullName, profilePicture } = values;
-        let photoURL = user.photoURL;
+    
+    const { fullName, profilePicture } = values;
+    const currentUser = auth.currentUser;
+    const originalPhotoURL = user.photoURL; // Keep original URL for reversion
 
-        if (profilePicture && profilePicture.length > 0) {
-            const file = profilePicture[0];
-            const storageRef = ref(storage, `profile-pictures/${user.uid}`);
-            await uploadBytes(storageRef, file);
-            photoURL = await getDownloadURL(storageRef);
+    try {
+        // --- Part 1: Update display name immediately (fast) ---
+        if (currentUser.displayName !== fullName) {
+            await updateProfile(currentUser, {
+              displayName: fullName,
+            });
         }
         
-        await updateProfile(auth.currentUser, {
-          displayName: fullName,
-          photoURL: photoURL,
-        });
+        // --- Part 2: Handle profile picture upload in the background ---
+        const file = profilePicture?.[0];
+        if (file) {
+            // This is a fire-and-forget function for the upload
+            const uploadTask = async () => {
+                try {
+                    const storageRef = ref(storage, `profile-pictures/${currentUser.uid}`);
+                    await uploadBytes(storageRef, file);
+                    const photoURL = await getDownloadURL(storageRef);
+                    await updateProfile(currentUser, { photoURL });
+                } catch (uploadError: any) {
+                     toast({
+                        variant: 'destructive',
+                        title: 'Photo Upload Failed',
+                        description: 'Your name was saved, but the photo could not be uploaded.',
+                    });
+                    // Revert image preview if upload fails
+                    setImagePreview(originalPhotoURL);
+                }
+            };
+            uploadTask();
+        }
 
-        setUser({ ...auth.currentUser });
-        setImagePreview(photoURL);
-        
+        // --- Part 3: Update local state and show success toast ---
+        setUser({ ...auth.currentUser, displayName: fullName }); // Optimistic name update for UI
         toast({
             title: 'Profile Updated',
-            description: 'Your profile has been successfully updated.',
+            description: 'Your changes have been saved.',
         });
+
     } catch (error: any) {
         toast({
             variant: 'destructive',
@@ -112,6 +132,7 @@ export default function ProfilePage() {
             description: error.message,
         });
     } finally {
+        // --- Part 4: Stop loading spinner immediately ---
         setIsSaving(false);
     }
   }
