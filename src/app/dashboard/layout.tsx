@@ -142,7 +142,7 @@ export default function DashboardLayout({
                 <Logo />
                 </SidebarHeader>
                 <SidebarContent>
-                <SidebarMenu>
+                <SidebarMenu className="gap-3">
                     {menuItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
                         <SidebarMenuButton
