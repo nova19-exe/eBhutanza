@@ -19,40 +19,13 @@ import {
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 
-const WelcomeFrame = ({ userName }: { userName: string }) => {
-  return (
-    <div className="flex h-screen w-full flex-col items-center justify-center text-center">
-      <div className="animate-in fade-in zoom-in-95 duration-1000">
-        <h1 className="text-5xl font-bold tracking-tight text-foreground md:text-7xl font-headline">
-          Welcome, {userName}
-        </h1>
-      </div>
-    </div>
-  );
-};
-
 
 export default function DashboardPage() {
   const userName = 'Tashi Delek';
   const applicationProgress = 25;
-  const mainContentRef = React.useRef<HTMLDivElement>(null);
-
-  React.useEffect(() => {
-    const timer = setTimeout(() => {
-      mainContentRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, 2000); // 2-second delay
-
-    return () => clearTimeout(timer);
-  }, []);
-
 
   return (
-      <>
-        {/* WelcomeFrame is at the top of the page flow. */}
-        <WelcomeFrame userName={userName} />
-        
-        {/* This ref is the scroll target. */}
-        <div ref={mainContentRef} className="flex flex-col gap-8 pt-8">
+        <div className="flex flex-col gap-8">
             <Card>
             <CardHeader>
                 <CardTitle>Joen pa Leg So, {userName}!</CardTitle>
@@ -124,6 +97,5 @@ export default function DashboardPage() {
             </Card>
             </div>
         </div>
-      </>
   );
 }
