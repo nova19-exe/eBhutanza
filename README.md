@@ -3,7 +3,7 @@
 **By InfiBytes — Harsh, Fayzan, Priyanshu, Aman**
 
 ## Overview
-A modern platform to apply for Bhutanese e-Residency, track status, and incorporate businesses, with AI compliance checks and multi-language support.
+A modern platform to apply for Bhutanese e-Residency, track status, and incorporate businesses, with AI compliance checks and multi-language support. Check it out at - https://ebhutanza-infibytes.vercel.app/auth
 
 ## Features
 - Guided e-Residency application
