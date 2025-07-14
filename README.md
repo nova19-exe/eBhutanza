@@ -26,4 +26,4 @@ npm run dev
 Next.js, React, Tailwind CSS, Firebase, Genkit, TypeScript
 
 ## Credits
-Built by InfiBytes: Harsh, Fayzan, Priyanshu, Aman
+Built by InfiBytes: Harsh, Fayzan, Priyanshu, Aman.
